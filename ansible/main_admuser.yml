@@ -1,0 +1,17 @@
+---
+- name: playbook for admin user management
+  hosts: '{{ host }}'
+  become: true
+  vars_files: all.adminuser.vars.yml
+  tasks:
+     - name: "Create admin user"
+       user:
+          name: "{{ user_name }}"
+          groups: "{{ user_group }}"
+          password: "{{ user_pwd | password_hash('sha512') }}"
+
+     - name: "Add ssh auth key"
+       authorized_key:
+          user: "{{ user_name }}"
+          key: "{{ user_key }}"
+

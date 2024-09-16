@@ -1,0 +1,53 @@
+{
+"pvs": {
+         "1": { 
+            "name": "sdb"
+           }
+     },
+
+"vgs": { 
+        "1": {
+             "name": "VgData",
+             "pv" : "sdb1"
+        }
+     },
+
+"lvs": { 
+        "1": {
+             "name": "lv_opt_cyan_etcd",
+             "vg": "VgData",
+             "size": "4"
+           },
+        "2": {
+              "name": "lv_opt_cyan_stolon",
+              "vg": "VgData",
+              "size": "10"
+            },
+        "3": {
+              "name": "lv_opt_cyan",
+              "vg": "VolGroup",
+              "size": "4"
+            }
+      },
+
+"fss": { 
+        "1" : {
+            "name": "/opt/cyan",
+            "fstype": "xfs",
+            "vg": "VolGroup",
+            "lv": "lv_opt_cyan"
+        },
+        "3": {
+             "name": "/opt/cyan/etcd",
+             "fstype": "xfs",
+             "vg": "VgData",
+             "lv": "lv_opt_cyan_etcd"
+        },
+        "2": {
+            "name": "/opt/cyan/stolon",
+            "fstype": "xfs",
+            "vg": "VgData",
+            "lv": "lv_opt_cyan_stolon"
+        }
+     }
+}

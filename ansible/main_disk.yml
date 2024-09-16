@@ -1,0 +1,63 @@
+---
+- name: playbook for disk management
+  hosts: '{{ host }}'
+  become: true
+  vars:
+    jsonVars: "{{ lookup('file', diskConfigFile )| from_json }}"
+  tasks:
+
+##    - debug: msg="{{ jsonVars | json_query('pvs.*.name')}}"
+
+##    - debug: msg="pvcreate /dev/{{ item }}"
+##      with_items:
+##          - "{{ jsonVars | json_query('pvs.*.name')}}"
+
+    - name: create partitions
+      parted:
+        device: "/dev/{{ item }}"
+        number: 1
+        flags: [ lvm ]
+        state: present
+      with_items:
+          - "{{ jsonVars | json_query('pvs.*.name')}}"
+
+    - name: create volume groups
+      lvg:
+         vg: "{{ item.name }}"
+         pvs: "/dev/{{ item.pv }}"
+         pesize: 16
+      with_items:
+          - "{{ jsonVars | json_query('vgs.*')}}"
+
+    - name: create logical volumes
+      lvol:
+          vg: "{{item.vg}}"
+          lv: "{{item.name}}"
+          size: "{{item.size}}g"
+          force: yes
+      with_items:
+          - "{{ jsonVars | json_query('lvs.*')}}"
+
+    - name: create directories
+      file:
+          path: "{{ item.name }}"
+          state: directory
+          mode: '0755'
+      with_items:
+          - "{{ jsonVars | json_query('fss.*')}}"
+
+    - name: format the filesystems
+      filesystem:
+           fstype: "{{ item.fstype }}"
+           dev: "/dev/{{ item.vg }}/{{ item.lv }}"
+      with_items:
+           - "{{ jsonVars | json_query('fss.*')}}"
+
+    - name: mount all logical volumes to directories
+      mount:
+           path: "{{ item.name }}"
+           src: "/dev/{{ item.vg}}/{{ item.lv }}"
+           fstype: "{{ item.fstype }}"
+           state: mounted
+      with_items:
+           - "{{ jsonVars | json_query('fss.*')}}"

@@ -1,0 +1,31 @@
+{
+"pvs": {
+         "1": { 
+            "name": "sdb"
+           }
+     },
+
+"vgs": { 
+        "1": {
+             "name": "VgData",
+             "pv" : "sdb1"
+        }
+     },
+
+"lvs": { 
+        "1": {
+              "name": "lv_opt_cyan",
+              "vg": "VgData",
+              "size": "64"
+            }
+      },
+
+"fss": { 
+        "1" : {
+            "name": "/opt/cyan",
+            "fstype": "xfs",
+            "vg": "VgData",
+            "lv": "lv_opt_cyan"
+        }
+     }
+}
