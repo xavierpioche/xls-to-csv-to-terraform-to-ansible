@@ -1,0 +1,158 @@
+{
+"lbs": {
+         "1": {
+               "name": "pm-lb",
+               "port": "443",
+               "back": { 
+                    "1": {
+                         "name": "it-cbf-prov-1",
+                         "ip": "172.31.49.9",
+                         "port": "443"
+                       },
+                    "2": {
+                         "name": "it-cbf-prov-2",
+                         "ip": "172.31.49.10",
+                         "port": "443"
+                      }
+                   }
+              },
+         "2": {
+               "name": "int-prov-lb",
+               "port": "443",
+               "back": { 
+                    "1": {
+                         "name": "it-cbf-prov-1",
+                         "ip": "172.31.49.9",
+                         "port": "443"
+                       },
+                    "2": {
+                         "name": "it-cbf-prov-2",
+                         "ip": "172.31.49.10",
+                         "port": "443"
+                      }
+                   }
+              },
+         "3": {
+               "name": "sicap-lb",
+               "port": "443",
+               "back": { 
+                    "1": {
+                         "name": "it-cbf-filterm-1",
+                         "ip": "172.31.49.30",
+                         "port": "443"
+                       }
+                   }
+              },
+         "4": {
+               "name": "sicap-dc-lb",
+               "port": "443",
+               "back": { 
+                    "1": {
+                         "name": "it-cbf-filterm-1",
+                         "ip": "172.31.49.30",
+                         "port": "9070"
+                       }
+                   }
+              },
+         "5": {
+               "name": "ns-lb",
+               "port": "443",
+               "back": { 
+                    "1": {
+                         "name": "it-cbf-prov-1",
+                         "ip": "172.31.49.1",
+                         "port": "443"
+                       }
+                   }
+              },
+         "6": {
+               "name": "scapi-lb",
+               "port": "443",
+               "back": { 
+                    "1": {
+                         "name": "it-cbf-apisv-1",
+                         "ip": "172.31.49.2",
+                         "port": "443"
+                       }
+                   }
+              },
+         "7": {
+               "name": "sso-lb",
+               "port": "443",
+               "back": { 
+                    "1": {
+                         "name": "it-cbf-prov-1",
+                         "ip": "172.31.49.1",
+                         "port": "443"
+                       }
+                   }
+              },
+         "8": {
+               "name": "ccapi-lb",
+               "port": "443",
+               "back": { 
+                    "1": {
+                         "name": "it-cbf-apisv-1",
+                         "ip": "172.31.49.2",
+                         "port": "443"
+                       }
+                   }
+              },
+         "9": {
+               "name": "bpapi-lb",
+               "port": "443",
+               "back": { 
+                    "1": {
+                         "name": "it-cbf-apisv-1",
+                         "ip": "172.31.49.2",
+                         "port": "443"
+                       }
+                   }
+              },
+         "10": {
+               "name": "saapi-lb",
+               "port": "443",
+               "back": { 
+                    "1": {
+                         "name": "it-cbf-apisv-1",
+                         "ip": "172.31.49.2",
+                         "port": "443"
+                       }
+                   }
+              },
+         "11": {
+               "name": "mrpm-lb",
+               "port": "5443",
+               "back": { 
+                    "1": {
+                         "name": "it-cbf-mdbdov-1",
+                         "ip": "172.31.49.16",
+                         "port": "5443"
+                       }
+                   }
+              },
+         "12": {
+               "name": "dov-m-lb",
+               "port": "443",
+               "back": { 
+                    "1": {
+                         "name": "it-cbf-dovm-1",
+                         "ip": "172.31.49.16",
+                         "port": "443"
+                       }
+                   }
+              },
+         "13": {
+               "name": "rep-lb",
+               "port": "443",
+               "back": { 
+                    "1": {
+                         "name": "it-cbf-dovm-1",
+                         "ip": "172.31.49.16",
+                         "port": "443"
+                       }
+                   }
+              }
+      }
+
+}

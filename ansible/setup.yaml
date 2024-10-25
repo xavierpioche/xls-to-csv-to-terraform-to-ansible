@@ -1,0 +1,7 @@
+---
+- name: setup
+  hosts: '{{ vmsgroup }}'
+  become: true
+  vars_files: all.adminuser.vars.yml
+  tasks:
+    - action: setup

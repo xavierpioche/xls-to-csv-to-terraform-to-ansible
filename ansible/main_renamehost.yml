@@ -1,0 +1,9 @@
+---
+- name: playbook for admin user management
+  hosts: '{{ host }}'
+  become: true
+  vars_files: all.adminuser.vars.yml
+  tasks:
+     - name: rename host
+       hostname:
+           name: "{{ inventory_hostname }}"

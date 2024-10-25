@@ -1,0 +1,7 @@
+- hosts: "{{ vmsgroup }}"
+  user: ansible
+  become: True
+  gather_facts: no
+  tasks:
+    - name: reboot host
+      reboot:

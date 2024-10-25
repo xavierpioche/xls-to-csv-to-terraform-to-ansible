@@ -1,0 +1,11 @@
+- hosts: "{{ vmsgroup }}"
+  user: ansible
+  become: True
+  tasks:
+#    - include_vars: "{{ awd }}/variables.yml"
+    - name: Install package "{{ package }}"
+      yum:
+        name: "{{ package }}"
+        state: present
+        update_cache: True
+

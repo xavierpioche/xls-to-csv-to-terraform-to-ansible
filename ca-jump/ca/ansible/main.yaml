@@ -1,0 +1,8 @@
+- hosts: "{{ vmsgroup }}"
+  become: yes
+  max_fail_percentage: 0
+  gather_facts: yes
+  vars_files: ./variables.yaml
+
+  tasks:
+    - import_tasks: main_ca.yaml

@@ -1,0 +1,96 @@
+# # step0
+- name: create directory
+  become: true
+  file: 
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - "/etc/pki/ca-trust/source/anchors"
+    - "/etc/pki/tls/private/"
+
+- name: Python OpenSSL package
+  become: true
+  apt:
+    name: 
+      - ca-certificates
+
+# Step 1
+- name: Generate private key
+  become: true
+  openssl_privatekey:
+    path: "/etc/pki/tls/private/{{ vip_name }}.key"
+
+- name: Generate CSR
+  become: true
+  openssl_csr:
+    path: "/etc/pki/tls/private/{{ vip_name }}.csr"
+    privatekey_path: "/etc/pki/tls/private/{{ vip_name }}.key"
+    country_name: FR
+    organization_name: "eNova Conseil"
+    common_name: "{{ vip_name }}"
+    subject_alt_name: "DNS:{{ ansible_host }},DNS:{{ ansible_fqdn }},DNS:{{ vip_name }}"
+
+# Step 2
+- name: Pull CSR
+  become: true
+  fetch: 
+    src: "/etc/pki/tls/private/{{ vip_name }}.csr"
+    dest: "{{ openssl_ownca_dir }}/{{ vip_name }}.csr"
+    flat: true
+
+# Step 3
+- name: Sign CSR with CA key
+  connection: local
+  delegate_to: localhost
+  openssl_certificate:
+    path: "{{ openssl_ownca_dir }}/{{ vip_name }}.crt"
+    csr_path: "{{ openssl_ownca_dir }}/{{ vip_name }}.csr"
+    ownca_path: "{{ openssl_ownca_dir }}/root.crt"
+    ownca_privatekey_path: "{{ openssl_ownca_dir }}/root.key"
+    privatekey_path: "{{ openssl_ownca_dir }}/root.key"
+    provider: ownca
+    privatekey_passphrase: "aze123QSD!"
+    ownca_privatekey_passphrase: "aze123QSD!"
+
+# Step 4
+- name: Push certificate rhel
+  become: true
+  copy:
+    src: "{{ openssl_ownca_dir }}/{{ vip_name }}.crt"
+    dest: "/etc/pki/tls/private/{{ vip_name }}.crt"
+
+- name: Push certificate ubuntu
+  become: true
+  copy:
+    src: "{{ openssl_ownca_dir }}/{{ vip_name }}.crt"
+    dest: "/usr/local/share/ca-certificates/{{ vip_name }}.crt"
+
+- name: Push CA rhel
+  become: true
+  copy: 
+    src: "{{ openssl_ownca_dir }}/root.crt"
+    dest: "/etc/pki/ca-trust/source/anchors/root.pem"
+
+- name: Push CA ubuntu
+  become: true
+  copy: 
+    src: "{{ openssl_ownca_dir }}/root.crt"
+    dest: "/etc/ssl/certs/root-cbf.pem"
+
+- name: Update CA Trust
+  become: true
+  command: "update-ca-certificates extract"
+    #command: "update-ca-trust extract"
+
+- name: Build PKCS12 file containing key and cert
+  become: true
+  openssl_pkcs12:
+    action: export
+    path: "/etc/pki/tls/private/{{ vip_name }}.p12"
+    friendly_name: "{{ vip_name }}"
+    privatekey_path: "/etc/pki/tls/private/{{ vip_name }}.key"
+    certificate_path: "/etc/pki/tls/private/{{ vip_name }}.crt"
+    other_certificates: "/etc/pki/ca-trust/source/anchors/root.pem"
+    state: present
+

@@ -1,5 +1,5 @@
 resource "dns_a_record_set" "srv" {
-  name = "${var.vm_prefix}-${var.vm_suffix}-${var.vm_name}"
+  name = "${var.vm_prefix}-${var.vm_name}-${var.vm_suffix}"
   zone = "${var.vm_envx}.${var.vm_dns_search}."
   addresses = ["${var.vm_address}"]
   ttl = 300

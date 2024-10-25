@@ -1,0 +1,48 @@
+#jinja2: trim_blocks:False
+global
+    log         127.0.0.1 local2
+
+    chroot      /var/lib/haproxy
+    pidfile     /var/run/haproxy.pid
+    maxconn     4000
+    user        haproxy
+    group       haproxy
+    daemon
+
+    stats socket /var/lib/haproxy/stats
+
+    ssl-default-bind-ciphers PROFILE=SYSTEM
+    ssl-default-server-ciphers PROFILE=SYSTEM
+
+defaults
+    mode                    http
+    log                     global
+    option                  httplog
+    option                  dontlognull
+    option http-server-close
+    option forwardfor       except 127.0.0.0/8
+    option                  redispatch
+    retries                 3
+    timeout http-request    10s
+    timeout queue           1m
+    timeout connect         10s
+    timeout client          1m
+    timeout server          1m
+    timeout http-keep-alive 10s
+    timeout check           10s
+    maxconn                 3000
+
+frontend main
+    bind *:{{ front_port }}
+
+acl acl_{{env}}-{{ vip_name }}_vip hdr_end(host) -i {{ env }}-{{ vip_name }}.{{ sub_domain }}.{{ domain }} hdr_end(host) -i {{ env }}-{{ vip_name }}.{{ sub_domain }}.{{ domain }}
+
+use_backend back_{{ env }}-{{ vip_name }} if acl_{{ env }}-{{ vip_name }}_vip
+
+backend back_{{ env }}-{{ vip_name }}
+        option httpchk GET /health
+        balance roundrobin
+        mode http 
+{% for idx in backends -%}
+{{'        '}}server {{ env }}-{{ backends[idx].back_name }} {{ backends[idx].back_ip }}:{{ backends[idx].back_port }} check
+{% endfor %}

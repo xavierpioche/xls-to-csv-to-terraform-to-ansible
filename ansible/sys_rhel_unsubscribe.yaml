@@ -1,0 +1,19 @@
+- name: souscription Redhat
+  hosts: "{{ vmsgroup }}"
+  remote_user: ansible
+  become: True
+  vars_files: all.profiles.vars.yml
+
+  tasks:
+      
+    - name: souscrire
+      command: subscription-manager unsubscribe --all
+
+#    - name: repository standard
+#      command: subscription-manager repos --enable="rhel-7-server-rpms"
+#
+#    - name: repository optional
+#      command: subscription-manager repos --enable="rhel-7-server-optional-rpms"
+#
+#    - name: repository extras
+#      command: subscription-manager repos --enable="rhel-7-server-extras-rpms"

@@ -1,0 +1,12 @@
+- hosts: "{{ vmsgroup }}"
+  user: ansible
+  become: True
+  gather_facts: no
+  tasks:
+    - name: add wheel to sudo
+      lineinfile:
+        dest: /etc/sudoers
+        state: present
+        regexp: '^wheel'
+        line: '%wheel  ALL=(ALL) NOPASSWD:ALL'
+        validate: 'visudo -cf %s'

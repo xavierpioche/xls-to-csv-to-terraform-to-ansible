@@ -1,0 +1,23 @@
+- hosts: "{{ vmsgroup }}"
+  user: ansible
+  become: True
+  tasks:
+    - name: configure internal dns
+      copy:
+        dest: "/etc/resolv.conf"
+        content: |
+            domain "{{ sub_domain }}.{{ domain }}"
+            search "{{ sub_domain }}.{{ domain }}"
+            nameserver 172.16.1.240
+            nameserver 172.17.1.240
+
+    - name: configure internal ntp
+      copy:
+        dest: "/etc/ntp.conf"
+        content: |
+            tinker panic 0
+            restrict 127.0.0.1
+            server 172.16.1.98 prefer
+            server 172.16.1.99
+            driftfile /var/lib/ntp/drift
+            broadcastdelay 0.008

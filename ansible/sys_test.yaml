@@ -1,0 +1,6 @@
+- hosts: "{{ vmsgroup }}"
+  user: ansible
+  become: True
+  tasks:
+    - name: Install package "{{ package }}"
+      debug: var=ansible_facts['os_family']

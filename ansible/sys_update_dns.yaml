@@ -1,0 +1,11 @@
+- hosts: "{{ vmsgroup }}"
+  user: ansible
+  become: True
+  tasks:
+    - name: add or rename A record
+      community.general.nsupdate:
+        key_name: "nsupdate"
+        server: "{{ dns_server }}"
+        zone: "{{ sub_domain }}.{{ domain }}"
+        record: "{{ vip_name }}"
+        value: "{{ vip_ip }}"

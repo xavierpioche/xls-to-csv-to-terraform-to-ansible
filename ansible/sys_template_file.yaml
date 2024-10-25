@@ -1,0 +1,11 @@
+- hosts: "{{ vmsgroup }}"
+  user: ansible
+  become: True
+  vars_files: "{{ var_template }}"
+  tasks:
+    - name: deploy template
+      template:
+        src: "{{ src_template }}"
+        dest: "{{ dst_template }}"
+
+

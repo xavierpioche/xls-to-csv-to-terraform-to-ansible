@@ -14,12 +14,17 @@
 
 "lvs": { 
         "1": {
-             "name": "lv_opt_cyan_kafka",
+             "name": "lv_opt_data_etcd",
              "vg": "VgData",
              "size": "4"
            },
         "2": {
-              "name": "lv_opt_cyan",
+              "name": "lv_opt_data_stolon",
+              "vg": "VgData",
+              "size": "10"
+            },
+        "3": {
+              "name": "lv_opt_data",
               "vg": "VolGroup",
               "size": "4"
             }
@@ -27,16 +32,22 @@
 
 "fss": { 
         "1" : {
-            "name": "/opt/cyan",
+            "name": "/opt/data",
             "fstype": "xfs",
             "vg": "VolGroup",
-            "lv": "lv_opt_cyan"
+            "lv": "lv_opt_data"
+        },
+        "3": {
+             "name": "/opt/data/etcd",
+             "fstype": "xfs",
+             "vg": "VgData",
+             "lv": "lv_opt_data_etcd"
         },
         "2": {
-            "name": "/opt/cyan/kafka",
+            "name": "/opt/data/stolon",
             "fstype": "xfs",
             "vg": "VgData",
-            "lv": "lv_opt_cyan_kafka"
+            "lv": "lv_opt_data_stolon"
         }
      }
 }

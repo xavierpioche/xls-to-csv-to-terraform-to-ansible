@@ -1,0 +1,9 @@
+- hosts: "{{ vmsgroup }}"
+  user: ansible
+  become: True
+  gather_facts: no
+  tasks:
+    - name: remove file
+      file:
+        path: "{{ dst_file }}"
+        state: absent

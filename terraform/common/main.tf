@@ -76,7 +76,8 @@ module "vm" {
     vm_is_windows = each.value.is_windows
     vm_datadsk = each.value.vm_data_disk
 
-    vm_dns_search = var.vm_dns_search
+    #vm_dns_search = var.vm_dns_search
+    vm_dns_search = "${var.vm_dns_subdomain}.${var.vm_dns_search}"
     vm_dns_list = var.vm_dns_list
 }
 
@@ -95,10 +96,22 @@ module "dns" {
     vm_suffix = each.value.vm_number
     vm_address = each.value.full_ip_1
     #vm_address = values(module.vm)[*].vm_address[0]
-    vm_envx = each.value.vm_folder
+    vm_envx = var.vm_dns_subdomain
+    #vm_envx = each.value.vm_folder
     #vm_envx = var.vms_envx["${each.key}"]
     ##vm_envx = var.vm_envx
-    vm_dns_search = var.vm_dns_search
+    vm_dns_search = "${var.vm_dns_search}"
+}
+
+module "rvs" {
+    for_each = { for asset in local.asset_csv : asset.id => asset }
+    source = "./rvs"
+    vm_name = each.value.vm_name
+    vm_prefix = each.value.environment
+    vm_suffix = each.value.vm_number
+    vm_address = each.value.full_ip_1
+    vm_envx = var.vm_dns_subdomain
+    vm_dns_search = "${var.vm_dns_search}"
 }
 
 module "ansible" {

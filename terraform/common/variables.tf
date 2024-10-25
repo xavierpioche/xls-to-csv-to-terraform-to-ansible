@@ -129,3 +129,4 @@ variable "ansible_group" {}
 variable "ansible_user" {}
 variable "ansible_key" {}
 variable "csv_file_path" {}
+variable "vm_dns_subdomain" {}

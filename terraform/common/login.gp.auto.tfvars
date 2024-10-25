@@ -1,3 +1,3 @@
-vsphere_endpoint = "vcenter.lab.local"
-vsphere_username = "administrator@vsphere.local"
-vsphere_password = "aze123QSD!"
+vsphere_endpoint = ""
+vsphere_username = ""
+vsphere_password = ""

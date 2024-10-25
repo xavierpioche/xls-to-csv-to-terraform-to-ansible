@@ -1,0 +1,30 @@
+- hosts: "{{ vmsgroup }}"
+  user: ansible
+  become: True
+  vars_files: all.profiles.vars.yml
+  gather_facts: false
+  tasks:
+
+    - name: Add http
+      ansible.builtin.lineinfile:
+        path: /etc/profile
+        line: export HTTP_PROXY=http://{{ proxy_url }}:{{ proxy_port }}
+        create: yes
+
+    - name: Add https
+      ansible.builtin.lineinfile:
+        path: /etc/profile
+        line: export HTTPS_PROXY=http://{{ proxy_url }}:{{ proxy_port }}
+        create: yes
+
+    - name: Add HTTP
+      ansible.builtin.lineinfile:
+        path: /etc/profile
+        line: export http_proxy=http://{{ proxy_url }}:{{ proxy_port }}
+        create: yes
+
+    - name: Add HTTPS
+      ansible.builtin.lineinfile:
+        path: /etc/profile
+        line: export https_proxy=http://{{ proxy_url }}:{{ proxy_port }}
+        create: yes
